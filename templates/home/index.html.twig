@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %} {% block body %}
+    <section class="section">
+        <div class="container">
+            <form method="post" action="/submit"  enctype="multipart/form-data" style="margin-bottom: 2rem;">
+                <div class="field">
+                    <label class="label" for="imie">Imię<span class="has-text-danger">*</span></label>
+                    <div class="control">
+                        <input class="input" type="text" id="imie" name="imie"/>
+                        <p class="help is-danger" id="imieError" style="display: none">
+                            Proszę wprowadzić imię.
+                        </p>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="nazwisko">Nazwisko<span class="has-text-danger">*</span></label>
+                    <div class="control">
+                        <input class="input" type="text" id="nazwisko" name="nazwisko"/>
+                        <p class="help is-danger" id="nazwiskoError" style="display: none">
+                            Proszę wprowadzić nazwisko.
+                        </p>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="plik">Zdjęcie<span class="has-text-danger">*</span></label>
+
+                    <div class="control">
+                        <input class="input" type="file" id="plik" name="plik"/>
+                        <p class="help is-info" id="infoPlik">
+                            Zdjęcie tylko w formacie PNG, JPG
+                        </p>
+                        <p class="help is-danger" id="plikError" style="display: none">
+                            Proszę wybrać plik.
+                        </p>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary" type="submit">Wyślij</button>
+                    </div>
+                </div>
+            </form>
+            <div class="notification is-success" style="display: none">
+                <button class="delete"></button>
+                <span id="successMessage">Pomyślnie wysłano dane.</span>
+            </div>
+            <div class="notification is-danger" style="display: none">
+                <button class="delete"></button>
+                <span id="errorMessage"></span>
+            </div>
+        </div>
+    </section>
+{% endblock %} {% block javascripts %}
+<script>
+    $(document).ready(function () {
+
+    $("form").on("submit", function (event) {
+        // Prevent the form from submitting normally
+        event.preventDefault();
+
+        // Walidacja danych formularza
+        let imie = $("#imie").val();
+        let nazwisko = $("#nazwisko").val();
+        let plik = $("#plik").val();
+        let isValid = true;
+
+        // Odkomentować 3 bloki w razie potrzeby walidacji na froncie
+        // if (imie === "") {
+        //     $("#imieError").show();
+        //     isValid = false;
+        // } else {
+        //     $("#imieError").hide();
+        // }
+
+        // W wytycznych nie było wymagane nazwisko
+        // if (nazwisko === "") {
+        //     $("#nazwiskoError").show();
+        //     isValid = false;
+        // } else {
+        //     $("#nazwiskoError").hide();
+        // }
+
+        // if (plik === "") {
+        //     $("#plikError").show();
+        //     isValid = false;
+        // } else {
+        //     $("#plikError").hide();
+        // }
+
+        // Wysyłka danych formularza asynchronicznie za pomocą AJAX
+        isValid &&
+        $.ajax({
+            url: $(this).attr("action"),
+            type: $(this).attr("method"),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                const {message} = data;
+                $('#successMessage').text(message);
+                $('.notification.is-danger').hide(100);
+                $('.notification.is-success').show(100);
+                $("form")[0].reset();
+            },
+            error: function (jqXHR) {
+                const response = JSON.parse(jqXHR.responseText);
+                console.log(response);
+                if (response.errors) {
+                    //errors are an array of objects, create ul li for each
+                    let errors = response.errors;
+                    let errorsHtml = '<ul>';
+                    for (let key in errors) {
+                        errorsHtml += '<li>' + errors[key] + '</li>';
+                    }
+                    errorsHtml += '</ul>';
+                    $('#errorMessage').html(errorsHtml);
+                    $('.notification.is-success').hide(100);
+                    $('.notification.is-danger').show(100);
+
+                } else {
+                    $('#errorMessage').text(response.message);
+                    $('.notification.is-success').hide(100);
+                    $('.notification.is-danger').show(100);
+
+                }
+
+            },
+        });
+    });
+    //notification dismiss
+        $('.notification .delete').click(function(){
+            $(this).parent('.notification').hide(100);
+        });
+});
+</script>
+
+{% endblock %}

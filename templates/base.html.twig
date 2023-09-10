@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Wrzucacz danych🖥️{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <link
+                rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"
+                integrity="sha512-HqxHUkJM0SYcbvxUw5P60SzdOTy/QVwA1JJrvaXJv4q7lmbDZCmZaqz01UPOaQveoxfYRv1tHozWGPMcuTBuvQ=="
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer"
+        />
+        <script
+                src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous"
+        ></script>
+        <style>
+            ul{
+                list-style: number;
+                padding-left: 1rem;
+            }
+        </style>
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    Wrzucacz danych🖥️
+                </a>
+            </div>
+
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <!-- Miejsce na inne elementy nawigacji -->
+                </div>
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a href="/admin/dashboard" class="button is-primary">
+                                <strong>Panel administratora</strong>
+                            </a>
+                        </div>
+                    </div>
+                    {% if app.user %}
+                    <div class="navbar-item">
+                            <a href="{{ path('app_logout') }}" class="button is-secondary">
+                                Wyloguj
+                            </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        {% block body %}{% endblock %}
+    </body>
+</html>

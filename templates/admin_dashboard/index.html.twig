@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admina{% endblock %}
+{% block body %}
+    <h2 class="title is-2">Dashboard Admina</h2>
+
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-12">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Zdjęcie</th>
+                        <th>Link</th>
+                        <th>Opcje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for userWithImage in pagination  %}
+                        <tr>
+                            <td>{{ userWithImage.getId() }}</td>
+                            <td>{{ userWithImage.getFirstName() }}</td>
+                            <td>{{ userWithImage.getLastName() }}</td>
+                            <td>
+                                <a href="/uploads/{{ userWithImage.getPicture() }}" target="_blank"
+                                   title="Nazwa pliku: {{ userWithImage.getPicture() }}"><img
+                                            src="/uploads/{{ userWithImage.getPicture() }}" alt="Zdjęcie użytkownika"
+                                            width="100"/>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/uploads/{{ userWithImage.getPicture() }}" target="_blank">Link do zdjęcia</a>
+                            </td>
+                            <td>
+                                <a href="/admin/user/{{ userWithImage.getId() }}/edit"
+                                   class="button is-primary">Edytuj</a>
+                                <form class="delete-entry"  style="display: inline-block;" action="{{ path('user_with_image_delete', { 'id': userWithImage.getId() }) }}"
+                                      method="post">
+                                    <input type="hidden" name="_token"
+                                           value="{{ csrf_token('delete' ~ userWithImage.getId()) }}">
+                                    <button type="submit" class="button is-danger">Usuń</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="column is-6 is-offset-3">
+                <div class="pagination-container">
+
+
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('form.delete-entry').on('submit', function(e) {
+                const result = confirm('Czy na pewno chcesz usunąć tego użytkownika?');
+
+                if (!result) {
+                    e.preventDefault();
+                    return
+                }
+
+
+                let form = $(this);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        alert(response.message);
+                        location.reload();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Wystąpił błąd podczas usuwania użytkownika.');
+                    }
+                });
+            });
+
+
+        });
+
+    </script>
+{% endblock %}

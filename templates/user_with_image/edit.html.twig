@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edycja użytkownika z obrazem{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="title">Edytuj użytkownika</h2>
+        <hr>
+
+        {{ form_start(form, {'enctype': 'multipart/form-data', 'attr': {'class': 'box'}}) }}
+
+        <div class="field">
+            {{ form_label(form.first_name, 'Imię', {'label_attr': {'class': 'label'}}) }}
+            <div class="control">
+                {{ form_widget(form.first_name, {'attr': {'class': 'input'}}) }}
+            </div>
+            {{ form_errors(form.first_name) }}
+        </div>
+
+        <div class="field">
+            {{ form_label(form.last_name, 'Nazwisko', {'label_attr': {'class': 'label'}}) }}
+            <div class="control">
+                {{ form_widget(form.last_name, {'attr': {'class': 'input'}}) }}
+            </div>
+            {{ form_errors(form.last_name) }}
+        </div>
+
+        <div class="field">
+            {{ form_label(form.picture, 'Zdjęcie', {'label_attr': {'class': 'label'}}) }}
+            <div class="control">
+                {{ form_widget(form.picture, {'attr': {'class': 'input'}}) }}
+            </div>
+            {{ form_errors(form.picture) }}
+        </div>
+
+        <div class="field mt-3">
+            <div class="control">
+                <button type="submit" class="button is-primary">Zaktualizuj</button>
+                <a href="{{ path('app_admin_dashboard') }}" class="button is-light">Anuluj</a>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
