@@ -18,7 +18,7 @@ class FileHandlerService
         $errors = [];
 
         if ($file === null) {
-            $errors[] = 'Nieprawidłowy plik lub brak pliku';
+            $errors[] = 'Brak zdjęcia. Załącz zdjęcie w formularzu.';
             return ['errors' => $errors];
         }
 
