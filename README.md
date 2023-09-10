@@ -38,10 +38,12 @@ php bin/console doctrine:migrations:migrate
 Ensure the uploads directory exists within the public folder and has write permissions:
 
 If project works open /init-admin to create admin user. This is for one time only.
+Default admin user is admin with password MichalRusin!23
+
 
 ```bash
-chmod 777 public/uploads
 mkdir public/uploads
+chmod 777 public/uploads
 ```
 # About the Project
 The primary form utilizes raw HTML, while the data editing module in the admin panel is powered by Symfony Form. A notable entity, UserWithImage, has been introduced which helps in managing user data along with their associated images.
