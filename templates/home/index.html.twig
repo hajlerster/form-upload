@@ -94,6 +94,10 @@
             data: new FormData(this),
             processData: false,
             contentType: false,
+            beforeSend: function () {
+                $('.notification.is-danger').hide(100);
+                $('.notification.is-success').hide(100);
+            },
             success: function (data) {
                 const {message} = data;
                 $('#successMessage').text(message);

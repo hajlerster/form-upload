@@ -13,12 +13,17 @@ class FileHandlerService
         $this->uploadsDirectory = $uploadsDirectory;
     }
 
-    public function validateAndUpload(UploadedFile $file): array
+    public function validateAndUpload(?UploadedFile $file): array
     {
         $errors = [];
 
+        if ($file === null) {
+            $errors[] = 'Nieprawidłowy plik lub brak pliku';
+            return ['errors' => $errors];
+        }
+
         if (!$file || !$file->isValid()) {
-            $errors[] = 'Nieprawidłowy plik';
+            $errors[] = 'Nieprawidłowy plik lub brak pliku';
             return $errors;
         }
 

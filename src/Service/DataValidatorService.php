@@ -20,6 +20,8 @@ class DataValidatorService
             $errors[] = 'Nazwisko jest wymagane';
         }
 
+
+
         return $errors;
     }
 }

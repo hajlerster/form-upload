@@ -37,6 +37,8 @@ php bin/console doctrine:migrations:migrate
 
 Ensure the uploads directory exists within the public folder and has write permissions:
 
+If project works open /init-admin to create admin user. This is for one time only.
+
 ```bash
 chmod 777 public/uploads
 mkdir public/uploads

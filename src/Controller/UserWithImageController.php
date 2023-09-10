@@ -19,14 +19,16 @@ class UserWithImageController extends AbstractController
     #[Route('/submit', name: 'submit', methods: ['POST'])]
     public function submit(Request $request, EntityManagerInterface $entityManager, DataValidatorService $validatorService, FileHandlerService $fileHandlerService): Response
     {
-
         $errors = $validatorService->validate($request);
 
         $file = $request->files->get('plik');
-        $fileData = $fileHandlerService->validateAndUpload($file);
-
-        if (isset($fileData['errors'])) {
-            $errors = array_merge($errors, $fileData['errors']);
+        if ($file === null) {
+            $errors[] = 'Nieprawidłowy plik lub brak pliku';
+        } else {
+            $fileData = $fileHandlerService->validateAndUpload($file);
+            if (isset($fileData['errors'])) {
+                $errors = array_merge($errors, $fileData['errors']);
+            }
         }
 
         if (!empty($errors)) {
@@ -44,8 +46,8 @@ class UserWithImageController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['success' => true, 'message' => 'Użytkownik został zapisany, a zdjęcie zapisane!'], 200);
-
     }
+
 
     #[Route('/admin/user/{id}/edit', name: 'user_with_image_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, UserWithImage $userWithImage, UserImageService $userImageService): Response
