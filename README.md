@@ -103,6 +103,12 @@ fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
     }
 ```
 
+To start local server run (you need to have symfony cli installed)
+```bash
+symfony server:start
+```
+
+
 # About the Project
 The primary form utilizes raw HTML, while the data editing module in the admin panel is powered by Symfony Form. A notable entity, UserWithImage, has been introduced which helps in managing user data along with their associated images.
 
